@@ -6,6 +6,7 @@
 
 int main (int *argc, char* argv){
    
+    
     bool op1 = true, op2 = true, op3 = true;
     int opcao1, opcao2;
 
@@ -71,3 +72,36 @@ int main (int *argc, char* argv){
     return 0;
 }
 
+#define TAM 30
+void mano(){
+    int fd[2]; //Descritores de arquivos para o pipe, posições: 0 leitura - 1 escrita
+    pid_t pid; // variável para o fork
+
+    if(pipe(fd) == -1){
+        printf("Error pipe\n");
+        return 1;
+    }
+    if((pid = fork() == -1)){
+        printf("Error fork\n");
+    }
+    if(pid > 0){
+        char input[TAM] = "testando os testes";
+        close(fd[0]);
+            
+            /*
+            pegar dados do teclado do arquivo
+            */
+        write(fd[1], input, sizeof(input) + 1);
+        close(fd[1]);
+        //É só isso por parte do pai, a execução encerra aqui ou tem que colocar um sleep()/wait()
+        return 1;
+    }else{
+        char InputComands[TAM];
+        close(fd[1]);
+
+        read(fd[0], InputComands, sizeof(InputComands));
+        close(fd[0]);
+        printf("Resultado: %s\n", InputComands);
+        //Parte do gerenciador de processos
+}
+}
