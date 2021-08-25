@@ -4,11 +4,11 @@
 #include <unistd.h>
 #include <stdbool.h>
 
-#define TAM 30
+#include "ProcessManager.c"
 
 
-void interacaoUsuarioTeclado() {
-    int opcao; // Opções de comando
+void interactionByKeyboard() {
+    int option; // Opções de comando
 
     while (1){
         printf("\n");
@@ -19,9 +19,9 @@ void interacaoUsuarioTeclado() {
         printf("| 4. M: Imprime o tempo medio do ciclo e finaliza o sistema.        |\n");
         printf("|-------------------------------------------------------------------|\n");
         printf("Opcao: ");
-        scanf("%d", &opcao);
+        scanf("%d", &option);
         
-        switch(opcao){
+        switch(option){
             case 1:
                 //code
                 printf("Processo desbloqueado!.\n");
@@ -57,9 +57,39 @@ void interacaoUsuarioTeclado() {
 }
 
 
-int main (int *argc, char* argv){
-    bool tipoLeitura;
-    int opcao;
+int main(int *argc, char* argv){
+    int fd[2]; // Usado para o pipe com o gerenciador de processos
+    pid_t pid; // Variável para armazenar o pid
+    int option; // Opção selecionada para o processo controller
+
+    //Cria o pipe
+    pipe(fd);
+    pid = fork();
+    if(fd < 0){//Verifica se o pipe foi instanciado corretamente (retorna -1 se deu erro)
+        printf("ERRO AO CRIAR O PIPE!!");
+        exit(EXIT_SUCCESS);
+    }
+    if(pid < 0){//Verifica se o processo foi instanciado corretamente (retorna -1 se deu erro)
+        printf("ERRO AO CRIAR O PROCESSO!!");
+        exit(EXIT_SUCCESS);
+    }
+    if(pid > 0){// Código do processo pai
+        char str[256] = "TESTE!";
+
+        //Como esse processo apenas escreverá, vamos fechar o primeiro fd do vetor
+        close(fd[0]);
+
+        printf("String enviada pelo pai no Pipe: '%s'\n\n", str);
+
+        //Escreve os dados no pipe
+        write(fd[1], str, sizeof(str) + 1);
+        getchar();
+        getchar();
+        exit(0);
+    } else if (pid == 0){ // Código do processo pai
+        ProcessManager(pid, fd);
+    }
+    
 
     printf("\n");
     printf("|-------------------------------------------------------------------|\n");
@@ -77,14 +107,14 @@ int main (int *argc, char* argv){
         printf("| 3. Encerrar programa.                                             |\n");
         printf("|-------------------------------------------------------------------|\n");
         printf("Opcao: ");
-        scanf("%d", &opcao);
+        scanf("%d", &option);
 
-        switch(opcao){
+        switch(option){
             case 1:
                 //interacaoUsuarioArquivo();
                 break;
             case 2:
-                interacaoUsuarioTeclado();
+                interactionByKeyboard();
                 break;
             case 3:
                 exit(EXIT_SUCCESS);
@@ -96,35 +126,4 @@ int main (int *argc, char* argv){
     }   
     
     return 0; // Retorno padrão do main (status 0 = OK)
-}
-
-
-int mano(pid_t pid, int *fd){
-    if(pipe(fd) == -1){
-        printf("Error pipe\n");
-        return 1;
-    }
-    if((pid = fork() == -1)){
-        printf("Error fork\n");
-    }
-    if(pid > 0){
-        char input[TAM] = "testando os testes";
-        close(fd[0]);
-            
-            /*
-            pegar dados do teclado do arquivo
-            */
-        write(fd[1], input, sizeof(input) + 1);
-        close(fd[1]);
-        //É só isso por parte do pai, a execução encerra aqui ou tem que colocar um sleep()/wait()
-        return 1;
-    }else{
-        char InputComands[TAM];
-        close(fd[1]);
-
-        read(fd[0], InputComands, sizeof(InputComands));
-        close(fd[0]);
-        printf("Resultado: %s\n", InputComands);
-        //Parte do gerenciador de processos
-    }
 }

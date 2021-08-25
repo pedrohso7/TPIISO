@@ -4,7 +4,7 @@
 
 # 1) -> Essa linha de comando compila o código main.c e cria um executável exec.run:
 
-terminal/bla/bla/bla/pastaDoProjeto$: gcc ProcessControle.c -pthread -o exec 
+terminal/bla/bla/bla/pastaDoProjeto$: gcc ProcessController.c -o exec 
 
 # 2) -> Essa linha executa o código compilado. PS: O código é exibido no terminal em que são executados os comandos:
 
@@ -33,6 +33,20 @@ terminal/bla/bla/bla/pastaDoProjeto$: git pull
 # Feito isso, pronto, agora está permitido usar o push:
 
 terminal/bla/bla/bla/pastaDoProjeto$: git push
+
+# Sobre os comandos do pthread:
+
+# ===========Para criar processos =================
+
+-> fork(): chamada de sistema cria uma cópia do processo que realizou o comando (sendo o mesmo o pai)
+
+-> execv(): (filho mata o pai) cria um processo e o executa imediatamente, o mesmo mata o processo que executou esse comando.
+
+-> system():  (sem crimes) cria um processo e o executa imediatamente.
+
+# ============ Disputa entre processos ==============
+
+-> pipe(fd): cria um pipe (comunicação entre processos utilizando um vetor de file descriptors)
 
 # PRINCIPAIS DECISÕES DE PROJETO:
 

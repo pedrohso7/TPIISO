@@ -1,5 +1,5 @@
-#ifndef PROCESSOSIMULADO_H
-#define PROCESSOSIMULADO_H
+#ifndef PROCESSSIMULATION_H
+#define PROCESSSIMULATION_H
 
 typedef struct ProcessoSimulado{
     int n;
