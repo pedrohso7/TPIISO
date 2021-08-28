@@ -5,6 +5,7 @@
 #include <stdbool.h>
 
 #include "ProcessManager.c"
+#include "ProcessSimulation.c"
 
 
 void interactionByKeyboard() {
@@ -83,9 +84,9 @@ int main(int *argc, char* argv){
 
         //Escreve os dados no pipe
         write(fd[1], str, sizeof(str) + 1);
-        getchar();
-        getchar();
-        exit(0);
+        //processMain();
+
+        
     } else if (pid == 0){ // Código do processo pai
         ProcessManager(pid, fd);
     }
@@ -94,7 +95,6 @@ int main(int *argc, char* argv){
     printf("\n");
     printf("|-------------------------------------------------------------------|\n");
     printf("|     - Trabalho Pratico 2 - Sistemas Operacionais                  |\n");
-    printf("|     - Felipe Stenner - EF03888                                    |\n");
     printf("|     - Mariana Souza - EF03898                                     |\n");
     printf("|     - Pedro Oliveira - EF02677                                    |\n");
     printf("|-------------------------------------------------------------------|\n");

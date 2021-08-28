@@ -1,3 +1,10 @@
+/*
+    Esse componente precisa:
+    -> Criar um novo processo (simulado).
+    -> Substituir a imagem atual de um processo simulado por uma imagem nova de processo
+    -> Gerenciar a transição de estados do processo.
+    -> Escalonar processos e trocar contexto (Política de escalonamento).
+*/
 
 #include "ProcessManager.h"
 
