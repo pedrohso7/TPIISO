@@ -62,6 +62,7 @@ int main(int *argc, char* argv){
     int fd[2]; // Usado para o pipe com o gerenciador de processos
     pid_t pid; // Variável para armazenar o pid
     int option; // Opção selecionada para o processo controller
+    char mem[MAXTAM];
 
     //Cria o pipe
     pipe(fd);

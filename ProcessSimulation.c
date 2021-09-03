@@ -56,13 +56,14 @@ void formatInstruction(char *instruction, char *instructionLetter, char *firstAr
     
 }
 
-void processMain(){
+void processMain(char *mem){
     char instructionLetter[MAXTAM];
     char firstArgument[MAXTAM];
     char secondArgument[MAXTAM];
     int n; //Número de variáveis
     int *d; //Sequência de memória a ser referenciad
 
+    pid_t pid;
     /* forces getline to allocate with malloc */
     char *instruction = NULL;//Vetor de leitura das instruções
 
@@ -93,33 +94,53 @@ void processMain(){
         formatInstruction(instruction, instructionLetter, firstArgument, secondArgument);
 
         switch (instructionLetter[0]){//Trata a instrução recebida
-            case 'N':
-                /* N n: Número de variáveis que serão declaradas neste processo simulado */
+            case 'N': //Número de va
+                /*N n: número de variáveis que serão declaradas neste processo simulado*/
+                n = atoi(firstArgument);
                 break;
             case 'D':
-                /* D x: Simulação a posição na memória de uma das variáveis "prometidas" */
+                /*D x: Índices das variáveis*/
+                d = (int*)malloc( n * sizeof(int*) );
+                for(i = 0;i <n;i++) d[i] = i; // preenche índices
                 break;
             case 'V':
                 /* V x n: Define o valor da variável inteira x para n, onde n é um inteiro */
+                mem[atoi(firstArgument)] = atoi(secondArgument);
                 break;
             case 'A':
                 /* A x n: Adiciona n ao valor da variável inteira x, onde n é um inteiro */
+                mem[atoi(firstArgument)] = mem[atoi(firstArgument)] + atoi(secondArgument);
                 break;
             case 'S':
                 /* S x n: Subtrai n do valor da variável inteira x, onde n é um inteiro */
+                mem[atoi(firstArgument)] = mem[atoi(secondArgument)] - atoi(firstArgument);
                 break;
             case 'F':
                 /* F n: Cria um novo processo simulad */
+                pid = fork();
+                if(pid < 0){//Verifica se o processo foi instanciado corretamente (retorna -1 se deu erro)
+                    printf("ERRO AO CRIAR O PROCESSO!!");
+                    exit(EXIT_SUCCESS);
+                }
+                if(pid > 0){// Código do processo pai
+                    
+                } else if (pid == 0){ // Código do processo filho
+                    
+                }
                 break;
             case 'R':
                 /*R nome_do_arquivo: Substitui o programa do processo simulado pelo programa no arquivo nome_do_arquivo 
                 e define o contador de programa para a primeira instrução desse novo programa*/
+                // char *argsExecv[]={firstArgument, NULL};
+                // execv(argsExecv[0], argsExecv);
                 break;
             case 'B':
                 /* Bloqueia o processo simulado */
+                //??
                 break;
             case 'T':
                 /* Termina o processo simulado */
+                return;//pthread_exit(void *pid);
                 break;
             
             case 'I':
