@@ -4,6 +4,8 @@
 void getPID();
 void clearMemoryGarbage(char *array, int N);
 void formatInstruction(char *instruction, char *instructionLetter, char *firstArgument, char *secondArgument);
+void runInstruction(char *instruction, int *n, int *d, char *mem);
+void getInstructions(char **instructions);
 void processMain();
 void innerManager();
 
