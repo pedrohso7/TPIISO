@@ -7,45 +7,34 @@
 // enum Estado { Pronto, Bloqueado, Execução};
 
 // //Tipos de prioridade
-// enum Prioridade { Alta, Media, Baixa};
+enum ProcessState { Blocked, InExecution, Ready } State;
+
+typedef int* Time; 
 
 //Estrutura de dados da CPU
-// typedef struct{
-//     int *ArrayProgam;
-//     int contProgram;
-//     int *memoryEstructdados;
-//     int timeProcessSimulado;
-// } CPU;
+typedef struct{
+    int *processProgram; //Ponteiro para a memória
+    int *PC; //Ponteiro para o PC do processo simulado
+    int PCValue;//Valor lido e utilizado na CCPU
+    int timeCPU;//Fatia de tempo ????
+} CPU;
 
-// //Estrutura de dados de um processo
-// typedef struct{
-//     int pid;
-//     int *programCounter;
-//     int EstructData;
-//     enum Prioridade prioridade;
-//     enum Estado estado;
-//     int timeI;
-//     int timeCPU;
-// } Process;
+//A TABELA DE PROCESSOS ARMAZENA OS DADOS DOS PROCESSOS
+//ENQUANTO 
+
+typedef struct{
+    int *pid;
+    int *PC;
+    int *EstructData;
+    int priority;
+    //State state;
+    int timeCPU;
+} Process;
 
 // //Estrutura de dados da tabela de processos
-// typedef struct{
-//     int pid;
-//     int ppid;
-//     int *ContProgram;
-//     int EstructData;
-//     int prioridada;
-//     int estado;
-//     int timeI;
-//     int timeCPU;
-// } ProcessTable;
-
-// //Estrutura de dados do processo gerenciador de processos
-// typedef struct{
-//     CPU cpu;
-//     ProcessTable* processTable;
-//     int stateExec;
-// } GerenciadordeProcesso;
+typedef struct{
+    Process *ProcessTable;
+} ProcessTable;
 
 
 void ProcessManager(pid_t pid, int *fd); // Processo gerenciador de processos

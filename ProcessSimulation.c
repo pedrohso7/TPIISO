@@ -32,7 +32,7 @@ void clearMemoryGarbage(char *array, int N){
 void runInstruction(char *instruction, int *n, int *d, char *mem){
     char instructionLetter[MAXTAM];
     char firstArgument[MAXTAM];
-    char secondArgument[MAXTAM];
+    char secondArgument[MAXTAM]; //se tiver
 
     pid_t pid;
 
@@ -104,10 +104,10 @@ void formatInstruction(char *instruction, char *instructionLetter, char *firstAr
     char *formatedInstruction;
     int iteraction = 0;
 
-    //printf( " ORIGINAL: %s\n", instruction);
-    clearMemoryGarbage(instructionLetter, MAXTAM);
-    clearMemoryGarbage(firstArgument, MAXTAM);
-    clearMemoryGarbage(secondArgument, MAXTAM);
+    // //printf( " ORIGINAL: %s\n", instruction);
+    // clearMemoryGarbage(instructionLetter, MAXTAM);
+    // clearMemoryGarbage(firstArgument, MAXTAM);
+    // clearMemoryGarbage(secondArgument, MAXTAM);
 
     //Divide string por espaços
     formatedInstruction = strtok(instruction, " ");
@@ -127,7 +127,7 @@ void formatInstruction(char *instruction, char *instructionLetter, char *firstAr
     
 }
 
-void getInstructions(char **instructions){
+void getInstructions(char **instructions, int *NInstrucoes){
     /* forces getline to allocate with malloc */
     char *instruction = NULL;//Vetor de leitura das instruções
     
@@ -147,9 +147,10 @@ void getInstructions(char **instructions){
         */
         while ((read = getline(&instruction, &len, stdin)) != -1) {
             if (read > 0) {
-                instructions[index] = (char*)malloc( strlen(instruction) * sizeof(char*) );;
+                instructions[index] = (char*)malloc( strlen(instruction) * sizeof(char*) );
                 instructions[index] = instruction;
                 index++;
+                *NInstrucoes++;
                 break;
             }else{
                 printf ("\n Nao foi encontrada nenhuma instrucao\n");
@@ -166,8 +167,10 @@ void processMain(char *mem){
     char **instructions;
     
     int PC = 0;
+    int timeSlice;
+
     int NInstrucoes = 0;
     
-    getInstructions(instructions);
+    getInstructions(instructions, &NInstrucoes);
     
 }
