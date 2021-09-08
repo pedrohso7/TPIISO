@@ -21,9 +21,6 @@
 
 
 void createPipeAndManagerProcess(int* fd, pid_t* pid){
-    //Controlador começa primeiro
-    //*hasData = 0;
-
     //Cria o pipe
     pipe(fd);
 
@@ -58,63 +55,48 @@ void getDataFromKeyboardAndWrite(int *pipe, char *instructionReceived){
     
     scanf("%s", instructionReceived);
     
-    //printf("\n%d\n", hasData);
-    
     //se foi inserido alguma coisa
-    if(strlen(instructionReceived) > 0){
+    if(strlen(instructionReceived) > 0)
         //Escreve os dados no pipe
-        //printf("\n%s\n", instructionReceived);
         write(pipe[1], instructionReceived, sizeof(instructionReceived) + 1);
-            //break;
-    }
+    
 }
 
 
 void interactionByKeyboard() {
     int pipe[2]; // Usado para o pipe com o gerenciador de processos
     pid_t pid; // Variável para armazenar o pid dos processos
-    int mutex = 1, hasData = 0;
+    int mutex = true, hasData = 0;
     
 
     //O nome já diz...
     createPipeAndManagerProcess(pipe, &pid);
-    
-    //while(true){
 
-        // Código do processo pai (Controller)
-        if(pid > 0){
-            char instructionReceived[TAM]; // Opções de comando
+    // Código do processo pai (Controller)
+    if(pid > 0){
+        char instructionReceived[TAM]; // Opções de comando
 
-            //Como esse processo apenas escreverá, vamos fechar o primeiro fd do vetor
-            close(pipe[0]);
+        //Como esse processo apenas escreverá, vamos fechar o primeiro fd do vetor
+        close(pipe[0]);
 
-             while(true){
-                 if(mutex == 1){
-                    mutex--;
-                    getDataFromKeyboardAndWrite(pipe, instructionReceived);          
-                 }
-             }
+        while(true){
+            sleep(1);
+            getDataFromKeyboardAndWrite(pipe, instructionReceived);
         }
+    }
 
-        // Código do processo filho (Manager)
-        else if( pid == 0) { 
-            //printf("FILHO hasData: %d", hasData);
-            //Como esse processo apenas lerá, vamos fechar o segundo fd do vetor
-            close(pipe[1]);
-            
-             while(true){    //hasData = 0;
-                if(mutex == 0){
-                    mutex++;
+    // Código do processo filho (Manager)
+    else if( pid == 0) { 
+        //Como esse processo apenas lerá, vamos fechar o segundo fd do vetor
+        close(pipe[1]);
+        
+        while(true){
+            processManager(&pid, pipe, hasData);
+            sleep(1);
+        }
+    } 
 
-                    processManager(&pid, pipe, hasData);
-                }
-            }
-            
-        } 
-
-        // Código executado por ambos 
-    //}
-    
+    // Código executado por ambos
 }
 
 

@@ -21,8 +21,6 @@ void getControllerData(int* pipe, char *instructionReceived){
     
     /* Lê dados no pipe */
     read(pipe[0], instructionReceived, sizeof(instructionReceived));
-    printf("Instrucao lida pelo Pipe : '%s'\n\n", instructionReceived);
-    
 }
 
 void runInstructionPM(char* instructionReceived){
@@ -58,9 +56,10 @@ void processManager(pid_t* pid, int *pipe, int hasData){
     char instructionReceived[TAM];//usada para pegar os dados no pipe
     
     
-    //if(hasData ==1){
-        getControllerData(pipe, instructionReceived);
+    //Lê os dados do pipe
+    getControllerData(pipe, instructionReceived);
+
+    if(strlen(instructionReceived) > 0)
         runInstructionPM(instructionReceived);
-        //clearMemoryGarbage(instructionReceived, TAM);
-    //} //else printf("waiting");
+    
 }
