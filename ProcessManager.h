@@ -39,8 +39,9 @@ typedef struct{
     Process *ProcessTable;
 } ProcessTable;
 
-
-void ProcessManager(pid_t pid, int *fd); // Processo gerenciador de processos
+void getControllerData(int* pipe, char *instructionReceived);
+void runInstructionPM(char* instructionReceived);
+void processManager(pid_t* pid, int *pipe, int hasData);//"main"
 
 
 
