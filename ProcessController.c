@@ -77,11 +77,13 @@ void interactionByKeyboard() {
         char instructionReceived[TAM]; // Opções de comando
 
         //Como esse processo apenas escreverá, vamos fechar o primeiro fd do vetor
-        close(pipe[0]);
+        //close(pipe[0]);
 
         while(true){
-            sleep(1);
+            system("clear");
             getDataFromKeyboardAndWrite(pipe, instructionReceived);
+            getchar();
+            getchar();
         }
     }
 
@@ -92,7 +94,7 @@ void interactionByKeyboard() {
         
         while(true){
             processManager(&pid, pipe, hasData);
-            sleep(1);
+            //sleep(1);
         }
     } 
 

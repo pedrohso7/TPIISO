@@ -24,27 +24,41 @@ void getControllerData(int* pipe, char *instructionReceived){
 }
 
 void runInstructionPM(char* instructionReceived){
+            int teste;
+
     switch(instructionReceived[0]){
         case 'U': //Fim de uma unidade de tempo
             //code
+            system("clear");
             printf("Fim de uma unidade de tempo!.\n");
+            // getchar();
+            // getchar();
+            //scanf("%d",&teste);
             break;
         case 'L': //Desbloqueia o primeiro processo simulado na fila bloqueada
             //code;
             printf("Desbloqueia o primeiro processo simulado na fila bloqueada!.\n");
+            // getchar();
+            // getchar();
             break;
         case 'I': //Imprimer o estado atual do sistema.
             //code;
             printf("Estado atual do sistema:\n");
+            // getchar();
+            // getchar();
             break;
         case 'M': //Imprime o tempo medio do ciclo e finaliza o sistema.
             //code;
             printf("Tempo médio do ciclo: \n");
+            // getchar();
+            // getchar();
             printf("PROGRAMA ENCERRADO!!\n");
             exit(EXIT_SUCCESS);
             break;
         default: 
             printf("Opcao Invalida...Digite novamente.\n");
+            // getchar();
+            // getchar();
             break;
     }
 }
@@ -59,7 +73,9 @@ void processManager(pid_t* pid, int *pipe, int hasData){
     //Lê os dados do pipe
     getControllerData(pipe, instructionReceived);
 
-    if(strlen(instructionReceived) > 0)
+    if(strlen(instructionReceived) > 0){
         runInstructionPM(instructionReceived);
+        //write(1, instructionReceived, 1);
+    }
     
 }
