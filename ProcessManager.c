@@ -23,59 +23,56 @@ void getControllerData(int* pipe, char *instructionReceived){
     read(pipe[0], instructionReceived, sizeof(instructionReceived));
 }
 
-void runInstructionPM(char* instructionReceived){
-            int teste;
+void runInstructionPM(char* instructionReceived, int* timeCPU){
+    system("clear");
 
     switch(instructionReceived[0]){
         case 'U': //Fim de uma unidade de tempo
-            //code
-            system("clear");
             printf("Fim de uma unidade de tempo!.\n");
-            // getchar();
-            // getchar();
-            //scanf("%d",&teste);
+            (*timeCPU)++;
             break;
         case 'L': //Desbloqueia o primeiro processo simulado na fila bloqueada
             //code;
             printf("Desbloqueia o primeiro processo simulado na fila bloqueada!.\n");
-            // getchar();
-            // getchar();
             break;
         case 'I': //Imprimer o estado atual do sistema.
             //code;
             printf("Estado atual do sistema:\n");
-            // getchar();
-            // getchar();
             break;
         case 'M': //Imprime o tempo medio do ciclo e finaliza o sistema.
             //code;
-            printf("Tempo médio do ciclo: \n");
-            // getchar();
-            // getchar();
+            printf("Tempo médio do ciclo: \nint ");
             printf("PROGRAMA ENCERRADO!!\n");
             exit(EXIT_SUCCESS);
             break;
         default: 
             printf("Opcao Invalida...Digite novamente.\n");
-            // getchar();
-            // getchar();
             break;
     }
 }
 
 void processManager(pid_t* pid, int *pipe, int hasData){
-    Time timeCPU;
+    int timeCPU = 0;
+    int auxTime;
     int *PC;
     int PCValue;
     char instructionReceived[TAM];//usada para pegar os dados no pipe
+    ProcessTable* processTable;
     
+    if ((processTable = (Fila *)malloc(sizeof(ProcessTable))) == NULL)
+        return -1;
+        
+    inicialize(processTable);
     
+    /* Pedro: Comentei para testar a implementação das listas
     //Lê os dados do pipe
     getControllerData(pipe, instructionReceived);
-
-    if(strlen(instructionReceived) > 0){
-        runInstructionPM(instructionReceived);
-        //write(1, instructionReceived, 1);
-    }
     
+    if(strlen(instructionReceived) > 0){
+        auxTime = timeCPU;
+        runInstructionPM(instructionReceived, &timeCPU);
+        if(auxTime != timeCPU){
+            //CODE
+        }
+    }*/
 }

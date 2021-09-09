@@ -6,19 +6,17 @@
 int main()
 {
     Fila *sequencia;
-    char *nome;
+    
     if ((sequencia = (Fila *)malloc(sizeof(Fila))) == NULL)
         return -1;
-    if ((nome = (char *)malloc(50 * sizeof(char))) == NULL)
-        return -1;
         
-    inicializacao(sequencia);
+    inicialize(sequencia);
     printf("Inserir uma palavra:");
     scanf("%s", nome);
-    inserir(sequencia, sequencia->fim, nome);
+    insert(sequencia, sequencia->fim, nome);
     printf("A F (%de elementos)\n", sequencia->tamanho);
     printf("\nInício de la F [ ");
-    exibir(sequencia);
+    show(sequencia);
 
     /*primeiro elemento inserido será exibido */
     printf(" ] fim de la F\n\n");

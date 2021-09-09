@@ -9,7 +9,7 @@
 // //Tipos de prioridade
 enum ProcessState { Blocked, InExecution, Ready } State;
 
-typedef int* Time; 
+typedef int Time; 
 
 //Estrutura de dados da CPU
 typedef struct{
@@ -40,7 +40,7 @@ typedef struct{
 } ProcessTable;
 
 void getControllerData(int* pipe, char *instructionReceived);
-void runInstructionPM(char* instructionReceived);
+void runInstructionPM(char* instructionReceived, Time* timeCPU);
 void processManager(pid_t* pid, int *pipe, int hasData);//"main"
 
 
