@@ -243,7 +243,7 @@ void runInstructionPS(char *instruction, int *n, int *d, char *mem){
 
 
 
-void processMain(){
+void processMain(char *fileName){
     
     int n; //Número de variáveis
     int *d; //Sequência de memória a ser referenciad
@@ -254,7 +254,13 @@ void processMain(){
 
     int instructionNum = 0;
     
-    instructions = getInstructionsFromFile(&instructionNum, "testProcess.txt");
-    //impressProcessMemory(instructions, instructionNum);
+    instructions = getInstructionsFromFile(&instructionNum, fileName);
+    int isFirstTime = 1;
+    while(1){
+        if(isFirstTime == 1){
+            impressProcessMemory(instructions, instructionNum);   
+            isFirstTime = 0;
+        }
+    }
     
 }

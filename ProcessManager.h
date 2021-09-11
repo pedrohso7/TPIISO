@@ -39,9 +39,11 @@ typedef struct{
     Process *ProcessTable;
 } ProcessTable;
 
+void clearArray(char* instructionReceived, int N);
 void getControllerData(int* pipe, char *instructionReceived);
-void runInstructionPM(char* instructionReceived, Time* timeCPU);
-void processManager(pid_t* pid, int *pipe, int hasData);//"main"
+void runInstructionFromController(char* instructionReceived, Time* timeCPU);
+void createFirstProcess(pid_t* pid, int* pipe);
+void processManager(int *pipe);//"main"
 
 
 

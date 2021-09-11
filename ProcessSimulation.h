@@ -9,7 +9,7 @@ char** getInstructionsFromFile(int *NInstrucoes, char* fileName);
 void getInstructionsFromKeyboard(char **instructions, int *NInstrucoes);
 void formatInstruction(char *instruction, char *instructionLetter, char *firstArgument, char *secondArgument);
 void runInstructionPS(char *instruction, int *n, int *d, char *mem);
-void processMain();
+void processMain(char *fileName);
 //void innerManager();
 
 

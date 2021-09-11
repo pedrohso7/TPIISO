@@ -67,7 +67,7 @@ void getDataFromKeyboardAndWrite(int *pipe, char *instructionReceived){
 void interactionByKeyboard() {
     int pipe[2]; // Usado para o pipe com o gerenciador de processos
     pid_t pid; // Variável para armazenar o pid dos processos
-    int mutex = true, hasData = 0;
+    //int mutex = true, hasData = 0;
     
 
     //O nome já diz...
@@ -78,10 +78,10 @@ void interactionByKeyboard() {
         char instructionReceived[TAM]; // Opções de comando
 
         //Como esse processo apenas escreverá, vamos fechar o primeiro fd do vetor
-        //close(pipe[0]);
+        close(pipe[0]);
 
         while(true){
-            system("clear");
+            //system("clear");
             getDataFromKeyboardAndWrite(pipe, instructionReceived);
             getchar();
             getchar();
@@ -92,11 +92,8 @@ void interactionByKeyboard() {
     else if( pid == 0) { 
         //Como esse processo apenas lerá, vamos fechar o segundo fd do vetor
         close(pipe[1]);
-        
-        while(true){
-            processManager(&pid, pipe, hasData);
-            //sleep(1);
-        }
+
+        processManager(pipe);
     } 
 
     // Código executado por ambos
@@ -104,13 +101,9 @@ void interactionByKeyboard() {
 
 
 int main(int *argc, char* argv){
-//    char mem[MAXTAM];
 
     //Testes do processo gerenciador
-    //interactionByKeyboard();
-
-    //Testes do processo simulado
-    processMain();
+    interactionByKeyboard();
 
     return 0; // Retorno padrão do main (status 0 = OK)
 }
