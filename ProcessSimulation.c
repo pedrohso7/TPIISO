@@ -29,7 +29,89 @@
 //     for(i = 0;i < N; i++) array[i] = 0;
 // }
 
-void getInstructions(char **instructions, int *NInstrucoes){
+void impressProcessMemory(char **instructions, int N){
+    int i, j;
+
+    //printf("%ld", strlen(instructions));
+    //printf("%ld", strlen(instructions[0]));
+    for(i=0; i<N; i++)
+        printf(" %s\n", instructions[i]);
+    
+
+}
+
+char** getInstructionsFromFile(int *instructionNum, char* fileName){
+    /* forces getline to allocate with malloc */
+    char **instructions = NULL;
+
+    FILE* fp;//File Pointer para ler instruções do processo a partir do arquivo
+    char c;//Auxilia na leitura do arquivo
+    char buffer[MAXTAM];
+    char length = 0;//Tamanho da linha de instrução
+
+    int index = 0;//índice da linha da matriz de instrução
+    int i;//usado em loop
+    int offset;
+
+
+    size_t len = 0;/* Ignorado quando a linha é NULL */
+    ssize_t read;
+
+    fp = fopen(fileName, "r");
+    if (fp == NULL){
+        perror("ERRO AO ABRIR ARQUIVO.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    //Conta número de instruções
+    while((c = fgetc(fp)) != EOF) 
+        if(c == '\n') 
+            index++;
+
+    //printf("%d", index);
+
+    //Aloca linhas
+    instructions = (char **)malloc( index * sizeof(char*) );
+    if(instructions == NULL) {
+        printf("Memoria insuficiente!\n");
+        free(instructions[(*instructionNum)]);
+        exit(EXIT_FAILURE);
+    }
+    
+    rewind(fp);
+
+    index = 0;
+    while((c = fgetc(fp)) != EOF){
+        
+        if(c == '\n') {
+            //Aloca coluna
+            instructions[*instructionNum] = NULL;
+            instructions[*instructionNum] = (char *)malloc( length * sizeof(char) );
+            if(instructions[*instructionNum] == NULL) {
+                printf("Memoria insuficiente!\n");
+                free(instructions[(*instructionNum)]);
+                exit(EXIT_FAILURE);
+            }
+
+            //Passa a instrução do buffer para o vetor de programa
+            for(i = 0;i < length; i++) 
+                instructions[*instructionNum][i] = buffer[i];
+            //printf("%s\n", instructions[*instructionNum]);
+            (*instructionNum)++;
+            length = 0;
+        }
+        else {
+            buffer[length] = c;
+            length++;
+        }
+    }
+
+    return instructions;
+
+   fclose(fp);
+}
+
+void getInstructionsFromKeyboard(char **instructions, int *instructionNum){
     /* forces getline to allocate with malloc */
     char *instruction = NULL;//Vetor de leitura das instruções
     
@@ -52,7 +134,7 @@ void getInstructions(char **instructions, int *NInstrucoes){
                 instructions[index] = (char*)malloc( strlen(instruction) * sizeof(char*) );
                 instructions[index] = instruction;
                 index++;
-                *NInstrucoes++;
+                *instructionNum++;
                 break;
             }else{
                 printf ("\n Nao foi encontrada nenhuma instrucao\n");
@@ -161,18 +243,18 @@ void runInstructionPS(char *instruction, int *n, int *d, char *mem){
 
 
 
-void processMain(char *mem){
+void processMain(){
     
     int n; //Número de variáveis
     int *d; //Sequência de memória a ser referenciad
-
-    char **instructions;
+    char **instructions = NULL;
     
     int PC = 0;
     int timeSlice;
 
-    int NInstrucoes = 0;
+    int instructionNum = 0;
     
-    getInstructions(instructions, &NInstrucoes);
+    instructions = getInstructionsFromFile(&instructionNum, "testProcess.txt");
+    //impressProcessMemory(instructions, instructionNum);
     
 }

@@ -16,6 +16,7 @@
 
 //#include "ProcessManager.c"
 #include "ProcessManager.h"
+#include "ProcessSimulation.h"
 
 #define TAM 256
 
@@ -105,10 +106,11 @@ void interactionByKeyboard() {
 int main(int *argc, char* argv){
 //    char mem[MAXTAM];
 
-    interactionByKeyboard();
+    //Testes do processo gerenciador
+    //interactionByKeyboard();
 
     //Testes do processo simulado
-    //processMain(mem);
+    processMain();
 
     return 0; // Retorno padrão do main (status 0 = OK)
 }

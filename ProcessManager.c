@@ -13,6 +13,7 @@
 #include <stdbool.h>
 
 #include "ProcessManager.h"
+#include "ProcessSimulation.h"
 //#include "ProcessSimulation.c"
 
 #define TAM 256 //2^8
@@ -52,18 +53,22 @@ void runInstructionPM(char* instructionReceived, int* timeCPU){
 }
 
 void processManager(pid_t* pid, int *pipe, int hasData){
-    int timeCPU = 0;
     int auxTime;
     int *PC;
     int PCValue;
     char instructionReceived[TAM];//usada para pegar os dados no pipe
-    ProcessTable* processTable;
+
+    // Time timeCPU = 0;
+    // CPU i3;//Não tem a mesma quantidade de núcleos mas é representativo, rs
+    // ProcessTable* processTable;
     
-    if ((processTable = (Fila *)malloc(sizeof(ProcessTable))) == NULL)
-        return -1;
+    // if ((processTable = (ProcessManager *)malloc(sizeof(ProcessTable))) == NULL)
+    //     return -1;
         
-    inicialize(processTable);
+    // inicialize(processTable);
     
+    processMain();
+
     /* Pedro: Comentei para testar a implementação das listas
     //Lê os dados do pipe
     getControllerData(pipe, instructionReceived);
