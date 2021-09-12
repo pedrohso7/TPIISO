@@ -1,10 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "FilaProcessosBloqueados.h"
+#include "ProcessList.h"
 
 //Criando a lista
-void inicialize(ProcessTable *sequence)
+void inicialize(List *sequence)
 {
     sequence->begin = NULL;
     sequence->end = NULL;
@@ -12,7 +12,7 @@ void inicialize(ProcessTable *sequence)
 }
 
 //Insere adiciona um elemento na lista
-int insert(ProcessTable *sequence, Element *actual, ProcessData *data)
+int insertElement(List *sequence, Element *actual, ProcessData *data)
 {
     Element *new_element;
     if ((new_element = (Element *)malloc(sizeof(Element))) == NULL)
@@ -21,7 +21,7 @@ int insert(ProcessTable *sequence, Element *actual, ProcessData *data)
     if ((new_element->data = (ProcessData *)malloc(sizeof(ProcessData))) == NULL)
         return -1;
 
-    strcpy(new_element->data, data);
+    new_element->data = data;
     if (actual == NULL)
     {
         if (sequence->length == 0)
@@ -41,7 +41,7 @@ int insert(ProcessTable *sequence, Element *actual, ProcessData *data)
 }
 
 //Remove um Elemento da lista 
-int remove(ProcessTable *sequence)
+int removeElement(List *sequence)
 {
     Element *remove_element;
     if (sequence->length == 0)
@@ -55,7 +55,7 @@ int remove(ProcessTable *sequence)
 }
 
 //Imprime a lista 
-void show(ProcessTable *sequence)
+void show(List *sequence)
 {
     Element *actual;
     int i;

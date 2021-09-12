@@ -14,6 +14,7 @@
 
 #include "ProcessManager.h"
 #include "ProcessSimulation.h"
+
 //#include "ProcessSimulation.c"
 
 #define TAM 256 //2^8
@@ -25,6 +26,38 @@ void clearArray(char* instructionReceived, int N){
         instructionReceived = 0;
 }
 
+void getManagerInitialState(List* processTable, List* blockedList, List* readyList, int* time, CPU *i3){
+    //Aloca dados de controle da lista
+    processTable = (List *)malloc(sizeof(List));
+    blockedList = (List *)malloc(sizeof(List));
+    readyList = (List *)malloc(sizeof(List));
+
+    //Confere se houve falha
+    if (processTable == NULL || blockedList == NULL || readyList == NULL){
+        printf("Memoria insuficiente!\n");
+        free(processTable);
+        free(blockedList);
+        free(readyList);
+        exit(EXIT_FAILURE);
+    }
+    
+    //Inicializa dados de controle das listas
+    inicialize(processTable);
+    inicialize(blockedList);
+    inicialize(readyList);
+
+    //Inicializa tempo
+    *time = 0;
+
+    //Aloca dados da CPU
+    i3 = (CPU *)malloc(sizeof(CPU));
+    if(i3 == NULL){
+        printf("Memoria insuficiente!\n");
+        free(i3);
+        exit(EXIT_FAILURE);
+    }
+}
+
 void getControllerData(int* pipe, char *instructionReceived){
     
     /* Lê dados no pipe */
@@ -32,13 +65,11 @@ void getControllerData(int* pipe, char *instructionReceived){
 }
 
 void runInstructionFromController(char* instructionReceived, CPU* i3){
-    //System("clear");
-
     switch(instructionReceived[0]){
         case 'U': //Fim de uma unidade de tempo
             printf("Executando proxima instrucao do processo simulado!.\n");
 
-            (*timeCPU)++;
+            //(*timeCPU)++;
             break;
         case 'L': //Desbloqueia o primeiro processo simulado na fila bloqueada
             //code;
@@ -76,18 +107,16 @@ void createFirstProcess(pid_t* pid, int* pipe){
         int PCValue;
         char instructionReceived[TAM];//usada para pegar os dados no pipe
 
-        Time timeCPU = 0;
+        //Estruturas do gerenciador
+        Time time;
         CPU *i3;//Não tem a mesma quantidade de núcleos mas é representativo, rs
-        
-        i3 = (CPU *)malloc(sizeof(CPU));
-        if(i3 == NULL){
-            printf("Memoria insuficiente!\n");
-            free(i3);
-            exit(EXIT_FAILURE);
-        }
-        
-        //ProcessTable *processTable;
+        List *processTable;//Armazena todos os processos
+        List *blockedList;//Fila de processos bloqueados
+        List *readyList;////Fila de processos "prontos"
+       
 
+        getManagerInitialState(processTable, blockedList, readyList, &time, i3);
+        
         while(1){
 
             //Lê os dados do pipe
@@ -96,7 +125,7 @@ void createFirstProcess(pid_t* pid, int* pipe){
             //Avalia se foi recebido algo
             if(strlen(instructionReceived) > 0){
                 //Executa instrução exigida pelo controller
-                runInstructionFromController(instructionReceived, &timeCPU);
+                runInstructionFromController(instructionReceived, i3);
                 //clearArray(instructionReceived, strlen(instructionReceived));
             }
         }

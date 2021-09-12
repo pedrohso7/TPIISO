@@ -1,13 +1,9 @@
 #include <sys/types.h>
+#include "ProcessList.h"
+
 
 #ifndef PROCESSMANAGER_H
 #define PROCESSMANAGER_H
-
-//Tipos de de estados de um processo
-// enum Estado { Pronto, Bloqueado, Execução};
-
-// //Tipos de prioridade
-enum ProcessState { Blocked, InExecution, Ready } State;
 
 typedef int Time; 
 
@@ -25,23 +21,19 @@ typedef struct{
 //TROCA DE CONTEXTO, REGISTRA A ALTERAÇÕES QUE O PROCESSADOR FEZ PARA
 //A TABELA E PARA O OS "REGISTRADORES" DO PROCESSO
 
-typedef struct{
-    int *pid;
-    int *PC;
-    int *EstructData;
-    int priority;
-    //State state;
-    int timeCPU;
-} Process;
-
-// //Estrutura de dados da tabela de processos
-typedef struct{
-    Process *ProcessTable;
-} ProcessTable;
+// typedef struct{
+//     int *pid;
+//     int *PC;
+//     int *EstructData;
+//     int priority;
+//     //State state;
+//     int timeCPU;
+// } Process;
 
 void clearArray(char* instructionReceived, int N);
+void getManagerInitialState(List* processTable, List* blockedList, List* readyList, int* time, CPU *i3);
 void getControllerData(int* pipe, char *instructionReceived);
-void runInstructionFromController(char* instructionReceived, Time* timeCPU);
+void runInstructionFromController(char* instructionReceived, CPU* i3);
 void createFirstProcess(pid_t* pid, int* pipe);
 void processManager(int *pipe);//"main"
 
