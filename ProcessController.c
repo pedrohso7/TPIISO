@@ -49,7 +49,7 @@ void getDataFromKeyboardAndWrite(int *pipe, char *instructionReceived){
     printf("|-------------------------------------------------------------------|\n");
     printf("| U: Fim de uma unidade de tempo.                                   |\n");
     printf("| L: Desbloqueia o primeiro processo simulado na fila bloqueada     |\n");
-    printf("| I: Imprimer o estado atual do sistema.                            |\n");
+    printf("| I: Imprime o estado atual do sistema.                            |\n");
     printf("| M: Imprime o tempo medio do ciclo e finaliza o sistema.           |\n");
     printf("|-------------------------------------------------------------------|\n");
     printf("Opcao: ");

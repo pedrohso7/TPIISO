@@ -1,6 +1,6 @@
 #include <sys/types.h>
-#include "ProcessList.h"
 
+#include "ProcessSimulation.h"
 
 #ifndef PROCESSMANAGER_H
 #define PROCESSMANAGER_H
@@ -33,8 +33,8 @@ typedef struct{
 void clearArray(char* instructionReceived, int N);
 void getManagerInitialState(List* processTable, List* blockedList, List* readyList, int* time, CPU *i3);
 void getControllerData(int* pipe, char *instructionReceived);
-void runInstructionFromController(char* instructionReceived, CPU* i3);
-void createFirstProcess(pid_t* pid, int* pipe);
+void runInstructionFromController(char* instructionReceived, List* processTable, List* blockedList, List* readyList, int* time, CPU *i3);
+void createManagerAndFirstProcess(int* pipe);
 void processManager(int *pipe);//"main"
 
 

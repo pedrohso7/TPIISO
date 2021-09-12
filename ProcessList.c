@@ -59,10 +59,32 @@ void show(List *sequence)
 {
     Element *actual;
     int i;
-    actual = sequence->begin;
-    for (i = 0; i < sequence->length; ++i)
-    {
-        //printf(" %s ", actual->data);
-        actual = actual->next;
-    }
+    char state[15];
+
+    
+    printf("\n %d\n", sequence->length);
+    // actual = sequence->begin;
+    // if(sequence->length == 0){
+    //     printf("Lista Vazia!\n");
+    // } else {
+    //     printf("step 1");
+    //     for (i = 0; i < sequence->length; ++i){
+    //         printf("step 2");
+    //         //Torna a variável estado mais visual
+    //         switch(*(actual->data->state)){
+    //             case 0:
+    //                 strcpy(state, "bloqueado");
+    //                 break;
+    //             case 1:
+    //                 strcpy(state, "pronto");
+    //                 break;
+    //             case 2:
+    //                 strcpy(state, "em execucao");
+    //                 break;
+    //         }
+    //         printf("step 3");
+    //         printf("%d -> PID: %d | PC: %d | ESTADO: %s | PRIORIDADE: \n", i, *(actual->data->pid), *(actual->data->PC), state);
+    //         actual = actual->next;
+    //     }
+    // }
 }

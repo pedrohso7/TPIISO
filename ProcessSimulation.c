@@ -147,11 +147,6 @@ void formatInstruction(char *instruction, char *instructionLetter, char *firstAr
     char *formatedInstruction;
     int iteraction = 0;
 
-    // //printf( " ORIGINAL: %s\n", instruction);
-    // clearMemoryGarbage(instructionLetter, MAXTAM);
-    // clearMemoryGarbage(firstArgument, MAXTAM);
-    // clearMemoryGarbage(secondArgument, MAXTAM);
-
     //Divide string por espaços
     formatedInstruction = strtok(instruction, " ");
 
@@ -243,7 +238,7 @@ void runInstructionPS(char *instruction, int *n, int *d, char *mem){
 
 
 
-void processMain(char *fileName){
+void processMain(char *fileName, List *processTable){
     
     int n; //Número de variáveis
     int *d; //Sequência de memória a ser referenciad
