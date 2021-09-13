@@ -32,12 +32,8 @@
 void impressProcessMemory(char **instructions, int N){
     int i, j;
 
-    //printf("%ld", strlen(instructions));
-    //printf("%ld", strlen(instructions[0]));
     for(i=0; i<N; i++)
         printf(" %s\n", instructions[i]);
-    
-
 }
 
 char** getInstructionsFromFile(int *instructionNum, char* fileName){
@@ -67,8 +63,6 @@ char** getInstructionsFromFile(int *instructionNum, char* fileName){
     while((c = fgetc(fp)) != EOF) 
         if(c == '\n') 
             index++;
-
-    //printf("%d", index);
 
     //Aloca linhas
     instructions = (char **)malloc( index * sizeof(char*) );
@@ -236,26 +230,63 @@ void runInstructionPS(char *instruction, int *n, int *d, char *mem){
     }
 }
 
+int getSelfDataAndSendToLists(List *processTable, ProcessData *newElementData, Element *newElement, int *PID, int *PC, int *d, int *priority, int *state, int *timeCPU){
+
+    if ((newElement = (Element *)malloc(sizeof(Element))) == NULL){
+        printf("FALHA AO ALOCAR MEMÓRIA!!");
+        free(newElement);
+        return -1;
+    }
+
+    if ((newElement->data = (ProcessData *)malloc(sizeof(ProcessData))) == NULL){
+        printf("FALHA AO ALOCAR MEMÓRIA!!");
+        free(newElement->data);
+        return -1;
+    }
+    // newElementData = (ProcessData *)malloc(sizeof(ProcessData));
+    // if(newElementData == NULL){
+    //     printf("FALHA AO ALOCAR MEMÓRIA!!");
+    //     free(newElementData);
+    //     exit(EXIT_FAILURE);
+    // }
+
+    newElement->data->pid = PID;
+    newElement->data->data = d;
+    newElement->data->pc = PC;
+    newElement->data->state = state;
+    newElement->data->timeCPU = timeCPU;
+    newElement->data->priority = priority;
+    
+    //printf("PID: %d | PC: %d | ESTADO: %d | PRIORIDADE: %d\n", *(newElementData->pid), *(newElementData->pc), *(newElementData->state), *(newElementData->priority));
+    insertElement(processTable, processTable->end, newElement);
+    return 0;
+}
+
 
 
 void processMain(char *fileName, List *processTable){
-    
     int n; //Número de variáveis
+    int pid = getpid();
+    int pc = 0;
     int *d; //Sequência de memória a ser referenciad
-    char **instructions = NULL;
-    
-    int PC = 0;
-    int timeSlice;
+    int priority = 0;
+    int state = 0;
+    int timeCPU = 0;
 
+    //Utilizados para leitura do arquivo
+    char **instructions = NULL;
     int instructionNum = 0;
+
+    Element *newElement;
+    ProcessData *newElementData;
+
+    int isAllNice;
     
     instructions = getInstructionsFromFile(&instructionNum, fileName);
-    int isFirstTime = 1;
+    isAllNice = getSelfDataAndSendToLists(processTable, newElementData, newElement, &pid, &pc, d, &priority, &state, &timeCPU);
+
     while(1){
-        if(isFirstTime == 1){
-            impressProcessMemory(instructions, instructionNum);   
-            isFirstTime = 0;
-        }
+        
     }
     
 }

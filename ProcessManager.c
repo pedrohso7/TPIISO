@@ -9,6 +9,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
+#include <sys/mman.h>
+#include <sys/wait.h>
 #include <unistd.h>
 #include <stdbool.h>
 
@@ -18,6 +20,12 @@
 
 #define TAM 256 //2^8
 
+Time *time;
+CPU *i3;//Não tem a mesma quantidade de núcleos mas é representativo, rs
+List *processTable;//Armazena todos os processos
+List *blockedList;//Fila de processos bloqueados
+List *readyList;////Fila de processos "prontos"
+
 void clearArray(char* instructionReceived, int N){
     int i;
 
@@ -25,36 +33,45 @@ void clearArray(char* instructionReceived, int N){
         instructionReceived = 0;
 }
 
-void getManagerInitialState(List* processTable, List* blockedList, List* readyList, int* time, CPU *i3){
-    //Aloca dados de controle da lista
-    processTable = (List *)malloc(sizeof(List));
-    blockedList = (List *)malloc(sizeof(List));
-    readyList = (List *)malloc(sizeof(List));
-
-    //Confere se houve falha
-    if (processTable == NULL || blockedList == NULL || readyList == NULL){
-        printf("Memoria insuficiente!\n");
-        free(processTable);
-        free(blockedList);
-        free(readyList);
-        exit(EXIT_FAILURE);
-    }
+void getManagerInitialState(/*List* processTable, List* blockedList, List* readyList, int* time, CPU *i3*/){    
+    /*
+        O código para alocar os dados dessa maneira,
+        de maneira compartilhada, foi tirada de:
+        https://stackoverflow.com/questions/13274786/how-to-share-memory-between-processes-created-by-fork
+    */
     
     //Inicializa dados de controle das listas
+    processTable = mmap(NULL, sizeof *processTable, PROT_READ | PROT_WRITE, 
+                    MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+
+    blockedList = mmap(NULL, sizeof *blockedList, PROT_READ | PROT_WRITE, 
+                    MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+
+    readyList = mmap(NULL, sizeof *readyList, PROT_READ | PROT_WRITE, 
+                    MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+    
+    i3 = mmap(NULL, sizeof *i3, PROT_READ | PROT_WRITE, 
+                    MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+    
+    time = mmap(NULL, sizeof *time, PROT_READ | PROT_WRITE, 
+                    MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+
+    if(time == NULL || processTable == NULL || blockedList == NULL || readyList == NULL || i3 == NULL){
+        printf("Memoria insuficiente!\n");
+        free(i3);
+        free(readyList);
+        free(blockedList);
+        free(processTable);
+        
+        exit(EXIT_FAILURE);
+    }
     inicialize(processTable);
+    printf("\n man:%d\n", processTable->length);
     inicialize(blockedList);
     inicialize(readyList);
 
     //Inicializa tempo
     *time = 0;
-
-    //Aloca dados da CPU
-    i3 = (CPU *)malloc(sizeof(CPU));
-    if(i3 == NULL){
-        printf("Memoria insuficiente!\n");
-        free(i3);
-        exit(EXIT_FAILURE);
-    }
 }
 
 void getControllerData(int* pipe, char *instructionReceived){
@@ -63,7 +80,7 @@ void getControllerData(int* pipe, char *instructionReceived){
     read(pipe[0], instructionReceived, sizeof(instructionReceived));
 }
 
-void runInstructionFromController(char* instructionReceived, List* processTable, List* blockedList, List* readyList, int* time, CPU *i3){
+void runInstructionFromController(char *instructionReceived/*, List *processTable, List *blockedList, List *readyList, int *time, CPU *i3*/){
     switch(instructionReceived[0]){
         case 'U': //Fim de uma unidade de tempo
             printf("Executando proxima instrucao do processo simulado!.\n");
@@ -76,7 +93,11 @@ void runInstructionFromController(char* instructionReceived, List* processTable,
             break;
         case 'I': //Imprimer o estado atual do sistema.
             printf("Estado atual do sistema:\n");
-
+            if(processTable->begin->data != NULL){
+                printf("qqpega ze");
+            }
+            //printf("%d", processTable->begin->data->pid);
+            // printf("PID: %d | PC: %d | ESTADO: %d | PRIORIDADE: %d\n", *(processTable->begin->data->pid), *(processTable->begin->data->pc), *(processTable->begin->data->state), *(processTable->begin->data->priority));
             //Exibe tabela de processos
             printf("=======TABELA DE PROCESSOS======\n");
             show(processTable);
@@ -105,16 +126,9 @@ void runInstructionFromController(char* instructionReceived, List* processTable,
 }
 
 void createManagerAndFirstProcess(int* pipe){
-    //Estruturas do gerenciador
-    Time time;
-    CPU *i3;//Não tem a mesma quantidade de núcleos mas é representativo, rs
-    List *processTable;//Armazena todos os processos
-    List *blockedList;//Fila de processos bloqueados
-    List *readyList;////Fila de processos "prontos"
-    
     pid_t pid;//PID do único processo instancido pelo gerenciador
     
-    getManagerInitialState(processTable, blockedList, readyList, &time, i3);
+    getManagerInitialState(/*processTable, blockedList, readyList, time, i3*/);
 
     pid = fork();
 
@@ -138,7 +152,7 @@ void createManagerAndFirstProcess(int* pipe){
             //Avalia se foi recebido algo
             if(strlen(instructionReceived) > 0){
                 //Executa instrução exigida pelo controller
-                runInstructionFromController(instructionReceived, processTable, blockedList, readyList, &time, i3);
+                runInstructionFromController(instructionReceived/*, processTable, blockedList, readyList, &time, i3*/);
                 //clearArray(instructionReceived, strlen(instructionReceived));
             }
         }

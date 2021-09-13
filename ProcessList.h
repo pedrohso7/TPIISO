@@ -7,8 +7,14 @@ enum ProcessState { Blocked, InExecution, Ready } State;
 //Dados de um elemento
 typedef struct {
     int *pid;
-    int *PC;
-    int *EstructData;
+    int *pc;
+    int *data;
+    /*
+      Valores possíveis para a variável state:
+        0: baixa,
+        1: média,
+        2: alta.
+    */
     int *priority;
     /*
       Valores possíveis para a variável state:
@@ -40,9 +46,9 @@ typedef struct ListaDetectada{
 #define lastElement(sequence) sequence->end->data
 
 //Inicializando a Lista
-void inicialize(List *sequence);
+void inicialize(List* sequence);
 //Inserindo na Lista
-int insertElement(List *sequence, Element *actual, ProcessData *data);
+void insertElement(List *sequence, Element *actual, Element *new_element/*, ProcessData *data*/);
 //Removendo na Lista
 int removeElement(List *sequence);
 //Imprime a Lista

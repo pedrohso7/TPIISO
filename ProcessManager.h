@@ -31,9 +31,9 @@ typedef struct{
 // } Process;
 
 void clearArray(char* instructionReceived, int N);
-void getManagerInitialState(List* processTable, List* blockedList, List* readyList, int* time, CPU *i3);
+void getManagerInitialState(/*List* processTable, List* blockedList, List* readyList, int* time, CPU *i3*/);
 void getControllerData(int* pipe, char *instructionReceived);
-void runInstructionFromController(char* instructionReceived, List* processTable, List* blockedList, List* readyList, int* time, CPU *i3);
+void runInstructionFromController(char* instructionReceived/*, List* processTable, List* blockedList, List* readyList, int* time, CPU *i3*/);
 void createManagerAndFirstProcess(int* pipe);
 void processManager(int *pipe);//"main"
 
