@@ -82,6 +82,7 @@ void interactionByKeyboard() {
 
         while(true){
             //system("clear");
+            fflush(stdout);
             getDataFromKeyboardAndWrite(pipe, instructionReceived);
             getchar();
             getchar();

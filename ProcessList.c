@@ -13,22 +13,19 @@ void inicialize(List* sequence){
 //Insere adiciona um elemento na lista
 void insertElement(List *sequence, Element *actual, Element *new_element/*, ProcessData *data*/){
     //Element *new_element;
-
+    
     if (actual == NULL){
-        printf("1");
         if (sequence->length == 0)
             sequence->end = new_element;
         new_element->next = sequence->begin;
         sequence->begin = new_element;
     }else {
-        printf("2");
         if (actual->next == NULL)
             sequence->end = new_element;
         new_element->next = actual->next;
         actual->next = new_element;
     }
     sequence->length++;
-    printf("chegou aqui");
     //return 0;
 }
 
@@ -58,24 +55,23 @@ void show(List *sequence){
     if(sequence->length == 0){
         printf("Lista Vazia!\n");
     } else {
-        printf("step 1");
         for (i = 0; i < sequence->length; ++i){
-            printf("step 2");
             //Torna a variável estado mais visual
-            // switch(*(actual->data->state)){
-            //     case 0:
-            //         strcpy(state, "bloqueado");
-            //         break;
-            //     case 1:
-            //         strcpy(state, "pronto");
-            //         break;
-            //     case 2:
-            //         strcpy(state, "em execucao");
-            //         break;
-            // }
-            printf("step 3");
-            //printf("%d -> PID: %d | PC: %d | ESTADO: %d | PRIORIDADE: \n", i, *(actual->data->pid), *(actual->data->pc), *(actual->data->state));
+            switch(*(actual->data->state)){
+                case 0:
+                    strcpy(state, "bloqueado");
+                    break;
+                case 1:
+                    strcpy(state, "pronto");
+                    break;
+                case 2:
+                    strcpy(state, "em execucao");
+                    break;
+            }
+            printf("%d -> PID: %d | PC: %d | ESTADO: %d | PRIORIDADE: %d\n", i, *(actual->data->pid), *(actual->data->pc), *(actual->data->state), *(actual->data->priority));
             actual = actual->next;
         }
+        printf("FIM!");
+
     }
 }

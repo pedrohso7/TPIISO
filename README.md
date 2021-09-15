@@ -4,7 +4,7 @@
 
 # 1) -> Essa linha de comando compila o código main.c e cria um executável exec.run:
 
-terminal/bla/bla/bla/pastaDoProjeto$: gcc ProcessController.c ProcessManager.c ProcessSimulation.c ProcessList.c -o exec 
+terminal/bla/bla/bla/pastaDoProjeto$: gcc ProcessController.c ProcessManager.c ProcessSimulation.c ProcessList.c -o exec -lrt 
 
 # 2) -> Essa linha executa o código compilado. PS: O código é exibido no terminal em que são executados os comandos:
 

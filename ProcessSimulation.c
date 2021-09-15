@@ -257,7 +257,7 @@ int getSelfDataAndSendToLists(List *processTable, ProcessData *newElementData, E
     newElement->data->timeCPU = timeCPU;
     newElement->data->priority = priority;
     
-    //printf("PID: %d | PC: %d | ESTADO: %d | PRIORIDADE: %d\n", *(newElementData->pid), *(newElementData->pc), *(newElementData->state), *(newElementData->priority));
+    printf("PID: %d | PC: %d | ESTADO: %d | PRIORIDADE: %d\n", *(newElementData->pid), *(newElementData->pc), *(newElementData->state), *(newElementData->priority));
     insertElement(processTable, processTable->end, newElement);
     return 0;
 }
@@ -281,9 +281,14 @@ void processMain(char *fileName, List *processTable){
     ProcessData *newElementData;
 
     int isAllNice;
+
+    //printf("FIII: %d", processTable->length);
+    fflush(stdin);
+    printf("FIII: 1");
     
     instructions = getInstructionsFromFile(&instructionNum, fileName);
     isAllNice = getSelfDataAndSendToLists(processTable, newElementData, newElement, &pid, &pc, d, &priority, &state, &timeCPU);
+
 
     while(1){
         
